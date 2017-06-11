@@ -1,0 +1,82 @@
+//异步请求header和footer信息
+$("#header").load("data/header.php");
+$("#footer").load("data/footer.php");
+//接收会话级存储的productDetail信息
+var product=sessionStorage.getItem("productDetail");
+product=JSON.parse(product);
+//console.log(product);
+var pinfo="";
+var total=0;
+var transferFee=parseFloat($("#transferFee").html());//获得运费信息
+for(var i=0;i<product.length;i++){
+  pinfo+=`<tr>
+    <td>000000${Math.floor(Math.random()*10000)}</td>
+    <td>${product[i].pname}</td>
+    <td>${product[i].price}</td>
+    <td>
+      <a href="#" class="btn btn-info btn-sm del1">-</a>
+      <span>1</span>
+      <a href="#" class="btn btn-info btn-sm add1">+</a>
+    </td>
+    <td>${product[i].price}</td>
+  </tr>`;
+  total+=parseFloat(product[i].price);
+}
+total+=transferFee;
+$("tbody").html(pinfo);
+$("#needPay").html(total.toFixed(2));
+//为加减号添加单击事件
+$("#orderInfo").on("click",".del1", function (e) {
+  e.preventDefault();
+  var values=$(this).next().html();
+  if(values>1){
+    values--;
+  }else{
+    values=1;
+  }
+  $(this).next().html(values);
+  $(this).parent().next().html((values*parseFloat($(this).parent().prev().html())).toFixed(2));
+  var bb=sum()+transferFee;
+  $("#needPay").html(bb);
+});
+$("#orderInfo").on("click",".add1", function (e) {
+  e.preventDefault();
+  var values=$(this).prev().html();
+  values++;
+  $(this).prev().html(values);
+  $(this).parent().next().html((values*parseFloat($(this).parent().prev().html())).toFixed(2));
+  var bb=sum()+transferFee;
+  $("#needPay").html(${总计}+bb);
+});
+//计算total支付金额
+function sum(){
+  var total=$("tbody>tr>td:last-child");
+  var aa=0;
+  for(var i=0;i<total.length;i++){
+    aa+=parseFloat(total[i].innerHTML);
+  }
+  aa=aa.toFixed(2);
+  return aa;
+}
+//设置提交按钮功能
+$("#subOrder").click(function (e) {
+  e.preventDefault();
+  //获取送达时间、用户地址、付款方式
+  var getTime=$("#timer").val();
+  var userAdd=$("#userAddr").val();
+  var pays=$("#payType").val();
+  var names=sessionStorage.getItem("userName");
+    $.ajax({
+      type:"POST",
+      url:"data/subOrders.php",
+      data:{userName:names,arrive:getTime,userAdd:userAdd,payment:pays,userData:product},
+      success: function (txt,msg,xhr) {
+        if(txt==="succ"){
+          alert("订单提交成功！");
+          //window.location.href="personal.html";
+        }else{
+          alert("发生未知错误！");
+        }
+      }
+    })
+});

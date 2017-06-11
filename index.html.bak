@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>主页</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    #right{
+      border:1px solid #000;
+      width:65%;
+      height: 800px;
+      float:right;
+      /*position: absolute;*/
+      /*right:10%;*/
+      /*top:10%;*/
+    }
+    .container .navbar-header>img{
+      margin-top:4px;
+    }
+
+    #main{
+      clear: both;
+	 
+    }
+    #footer footer{
+      text-align: center;
+    }
+  </style>
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css"/>
+  <!--[if lt IE 9]>
+  <script src="js/html5shiv.min.js"></script>
+  <script src="js/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="header"></header>
+<!--设置用户登录模态对话框-->
+<div class="modal fade" id="user-login">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" data-dismiss="modal">x</span>
+        <h3 class="text-center">用户登录</h3>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-md-2 col-md-offset-2">
+              <label for="uname">用户名:</label>
+            </div>
+            <div class="col-md-6">
+              <input  class="form-control" id="uname"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-2 col-md-offset-2">
+              <label for="upwd">密码：</label>
+            </div>
+            <div class="col-md-6">
+              <input type="password" class="form-control" id="upwd"/>
+            </div>
+          </div>
+          <p  class="text-right" style="padding-right: 10%"><a href="#">忘记密码？</a></p>
+        </form>
+      </div>
+      <div  class="modal-footer">
+        <a class="btn btn-block btn-info" id="userLog">登录</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--设置手风琴组件-->
+<div id="main">
+  <div class="panel-group" id="accordion" style="width:23%; padding-left:10%;height:800px;float: left">
+    <h2 class=" text-info">产品列表</h2>
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <a href="#meat" class="panel-title" data-toggle="collapse">肉类</a>
+      </div>
+      <div class="panel-collapse collapse" id="meat">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <a href="#vege" class="panel-title" data-toggle="collapse">蔬菜</a>
+      </div>
+      <div class="panel-collapse collapse" id="vege">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <a href="#bean" class="panel-title" data-toggle="collapse">豆制品</a>
+      </div>
+      <div class="panel-collapse collapse" id="bean">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <a href="#fruit" class="panel-title" data-toggle="collapse">水果</a>
+      </div>
+      <div class="panel-collapse collapse" id="fruit">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <a href="#grains" class="panel-title" data-toggle="collapse">米类</a>
+      </div>
+      <div class="panel-collapse collapse" id="grains">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <a href="#freeze" class="panel-title" data-toggle="collapse">冷冻食品</a>
+      </div>
+      <div class="panel-collapse collapse" id="freeze">
+        <ul class="panel-body list-inline list-unstyled">
+        </ul>
+      </div>
+    </div>
+    <!--插入轮播图-->
+    <div id="adv" class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="none" style="margin-top:60px">
+      <div  class="carousel-inner">
+        <div  class="item active">
+          <img src="img/tomato.jpg"/>
+        </div>
+        <div  class="item">
+          <img src="img/pepper.jpg"/>
+        </div>
+        <div  class="item">
+          <img src="img/pumpkin.jpg"/>
+        </div>
+        <div  class="item">
+          <img src="img/celery.jpg"/>
+        </div>
+      </div>
+      <div>
+        <ul class="carousel-indicators">
+          <li data-slide-to="0" data-target="#adv" class="active"></li>
+          <li data-slide-to="1" data-target="#adv"></li>
+          <li data-slide-to="2" data-target="#adv"></li>
+          <li data-slide-to="3" data-target="#adv"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container" id="dropdown">
+    <div  class="dropdown">
+      <select>
+        <option value="2500">2500m</option>
+        <option value="2000">2000m</option>
+        <option value="1800">1800m</option>
+        <option value="1500">1500m</option>
+        <option value="1000">1000m</option>
+        <option value="500" selected>500m</option>
+      </select>
+    </div>
+  </div>
+  <div id="right" style="margin-right:100px;" >
+
+  </div>
+</div>
+<div id="footer"></div>
+<script src="js/jquery-3.1.1.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/bootlint.js"></script>
+<script src="js/index.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
+</body>
+</html>

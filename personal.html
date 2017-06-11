@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
+  <style>
+    img{
+      width:100%;
+    }
+    #footer{
+      margin-top:200px;
+    }
+  </style>
+</head>
+<body>
+<header id="header"></header>
+<div class="container">
+  <h1 class="text-center">个人中心</h1>
+  <table  class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th>订单编号</th>
+      <th>用户名</th>
+      <th>商品名称</th>
+      <th>送货时间</th>
+      <th>用户地址</th>
+      <th>付款方式</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+<footer id="footer"></footer>
+<script src="js/jquery-3.1.1.js"></script>
+<script>
+  $("#header").load("data/header.php");
+  $("#footer").load("data/footer.php");
+  $(document).ready(function () {
+    //向服务器异步请求目前登录用户所有订单信息
+    var names=sessionStorage.getItem("userName");
+    $.ajax({
+      type:"GET",
+      url:"data/history.php",
+      data:{userName:names},
+      success: function (txt,msg,xhr) {
+        //将所接受到的服务器返回消息转换为数组对象
+        var historyBuy=JSON.parse(txt);
+        console.log(historyBuy);
+        var html="";
+        for(var i=0;i<historyBuy.length;i++){
+          console.log(historyBuy[i].userData);
+          historyBuy[i].userData=JSON.parse(historyBuy[i].userData);
+          var datas="";
+          for(var j=0;j<historyBuy[i].userData.length;j++){
+            if(j<4){
+              var list=(historyBuy[i].userData[j].pname).replace(/u/g,"%u");
+              var results=unescape(list);
+              datas+=results+",";
+            }else if(j>3){
+              datas+="......";
+              break;
+            }
+          }
+          html+=`<tr>
+          <td>${000000+Math.floor(Math.random()*100000)}</td>
+          <td>${historyBuy[i].uname}</td>
+          <td>${datas}</td>
+          <td>${historyBuy[i].arrive}:00</td>
+          <td>${historyBuy[i].userAdd}</td>
+          <td>${historyBuy[i].pay}</td>
+          `;
+        }
+        $("tbody").html(html);
+      }
+    })
+  })
+</script>
+</body>
+</html>

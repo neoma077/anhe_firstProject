@@ -1,0 +1,240 @@
+//异步请求头部和尾部信息
+$("#header").load("data/header.php");
+$("#footer").load("data/footer.php");
+//获取本地存储的商品数据
+var selList=localStorage.getItem("selItems");
+selList=selList.split(",");
+//对数组中的数据进行去重
+var selItem=unique(selList);
+ // console.log(selItem);
+//定义一个去重函数
+function unique(arr){
+  var res=[];
+  for(var i=0;i<arr.length;i++){
+    var repeat=false;
+    for(var j=0;j<res.length;j++){
+      if(arr[i]==res[j]){
+        repeat=true;
+        break;
+      }
+    }
+    if(!repeat){
+      res.push(arr[i]);
+    }
+  }
+  return res;
+}
+//将用户提交的数据显示在购物车界面
+var html="";
+for(var i=0;i<selItem.length;i++){
+  html+=`<tr>
+  <td class="proName">${selItem[i]}</td>
+  <td><span class="reduce btn-xs btn-info">-</span> <span class="num">1</span> <span class="add btn-xs btn-info">+</span></td>
+  <td><a href="#" class="delete btn btn-danger">删除</a></td>
+  </tr>`;
+}
+$("#userSel #users tbody").html(html);
+//为所选产品列表的-按钮添加相应功能
+$("#userSel").on("click",".reduce",function(e){
+  var target=e.target;
+  var num=$(target).next().html();
+  if(num>1){
+    --num;
+    $(target).next().html(num);
+  }
+});
+//为+添加功能
+$("#userSel").on("click",".add",function(e){
+  var target=e.target;
+  var num=$(target).prev().html();
+  ++num;
+  $(target).prev().html(num);
+});
+//为删除按钮添加相应功能
+$("#userSel").on("click",".delete",function (e) {
+  var target=e.target;
+  var toDel=$(target).parent().parent();
+  $(toDel).remove();
+});
+//获取用户最终提交的数据内容
+//将用户提交的数据存储到数据库并完成相应的计算
+$("#btnSub").click(function () {
+  var mes=[];
+  var pname = $("#userSel tbody .proName");
+  var count = $("#userSel tbody .num");
+    $("#denglu").html("个人中心");
+    for (i = 0; i < pname.length; i++) {
+      mes.push({kinds:pname[i].innerHTML,count:count[i].innerHTML});
+    }
+    var uname = localStorage.getItem("userName");
+    //console.log(mes);
+    $.ajax({
+      type: 'POST',
+      url: 'data/usersel.php',
+      data: {userName: uname, data: mes},
+      success: function (txt, msg, xhr) {
+		    if(txt=="succ"){
+          alert("数据提交成功！");
+        }else{
+          alert("发生未知错误！！！");
+        }
+      }
+    });
+  //执行查询操作
+  $.ajax({
+    type:'GET',
+    url:"data/search.php",
+    data:{product:mes},
+    success:function(txt,msg,xhr){
+      //console.log(txt);
+      //获取本地存储的超市名称和地理位置信息
+      var superInfo=localStorage.getItem("superMarket");
+      //将获取到的本地超市位置信息转换为数组对象
+      superInfo=JSON.parse(superInfo);
+      for(var i=0;i<superInfo.length;i++){
+        if(superInfo[i].title=="大润发"){
+          var dDis=superInfo[i].distance;
+        }else if(superInfo[i].title=="北京华联"){
+          var bDis=superInfo[i].distance;
+        }else if(superInfo[i].title=="合家福"){
+          var hDis=superInfo[i].distance;
+        }
+      }
+      //设置结果显示框display为block
+      $("#result").css("display","block");
+      // console.log(txt);
+      var darun=[],hejia=[],hualian=[];
+      //将每个超市的商品进行分类
+      for(var i=0;i<txt.length;i++){
+        if(txt[i].supermarket=="合家福"){
+          hejia.push(txt[i]);
+        }else if(txt[i].supermarket=="大润发"){
+          darun.push(txt[i]);
+        }else if(txt[i].supermarket=="北京华联"){
+          hualian.push(txt[i]);
+        }
+      }
+      //大润发的产品详情
+      var ht="",ss=0;
+      for(var j=0;j<darun.length;j++){
+        ss+=parseFloat(darun[j].price);
+        ht+=`<tr>
+        <td>${darun[j].pname}</td>
+        <td><span id="dele" class="reduce btn-xs btn-info">-</span> <span class="num">1</span> <span class="add btn-xs btn-info" id="add">+</span></td>
+        <td>${darun[j].supermarket}</td>
+        <td>${darun[j].price}</td>
+        <td>${dDis}</td>
+        <td class="sum">${darun[j].price}</td>
+        </tr>`;
+      }
+      $("#darunfa table tbody").html(ht);
+      $("#darunfa table tfoot td:last-child").html(ss.toFixed(2));
+      //合家福的产品详情
+      var hs="",dd=0;
+      for(var m=0;m<hejia.length;m++){
+        dd+=parseFloat(hejia[m].price);
+        hs+=`<tr>
+        <td>${hejia[m].pname}</td>
+        <td><span id="dele" class="reduce btn-xs btn-info">-</span> <span class="num">1</span> <span class="add btn-xs btn-info" id="add">+</span></td>
+        <td>${hejia[m].supermarket}</td>
+        <td>${hejia[m].price}</td>
+        <td>${hDis}</td>
+        <td class="sum">${hejia[m].price}</td>
+        </tr>`;
+      }
+      $("#hejiafu table tbody").html(hs);
+      $("#hejiafu table tfoot td:last-child").html(dd.toFixed(2));
+      //北京华联的产Float
+      var ho="",cc=0;
+      for(var n=0;n<hualian.length;n++){
+        cc+=parseFloat(hualian[n].price);
+        ho+=`<tr>
+        <td>${hualian[n].pname}</td>
+        <td><span id="dele" class="reduce btn-xs btn-info">-</span> <span class="num">1</span> <span class="add btn-xs btn-info" id="add">+</span></td>
+        <td>${hualian[n].supermarket}</td>
+        <td>${hualian[n].price}</td>
+        <td>${bDis}</td>
+        <td class="sum">${hualian[n].price}</td>
+        </tr>`;
+      }
+      $("#hualian table tbody").html(ho);
+      $("#hualian table tfoot td:last-child").html(cc.toFixed(2));
+      //最优组合的产品详情
+      //对接收到的产品信息进行升序排列
+      var bestResult=txt.sort(compare('price'));
+      var pp="";
+      var newItem=new Array();
+      for(var i=0;i<selItem.length;i++){
+        var newList=[];
+        for(var j=0;j<bestResult.length;j++){
+          if(selItem[i]==bestResult[j].pname){
+            newList.push(bestResult[j]);
+          }
+        }
+        newList=newList.slice(0);
+		//console.log(newList);
+        newItem.push(newList);
+      }
+      var productDetail=[];
+      for(var i=0;i<newItem.length;i++){
+        productDetail.push(newItem[i][0]);
+      }
+      //console.log(newItem);
+      productDetail=JSON.stringify(productDetail);
+      sessionStorage.setItem("productDetail",productDetail);
+      //console.log(productDetail);
+      var html="",uu=0;
+      for(var i=0;i<newItem.length;i++){
+        uu+=parseFloat(newItem[i][0].price);
+        html+=`<tr>
+        <td>${newItem[i][0].pname}</td>
+        <td><span id="dele" class="reduce btn-xs btn-info">-</span> <span class="num">1</span> <span class="add btn-xs btn-info" id="add">+</span></td>
+        <td>${newItem[i][0].supermarket}</td>
+        <td>${newItem[i][0].price}</td>
+        <td></td>
+        <td class="sum">${newItem[i][0].price}</td>
+        </tr>`;
+      }
+      $("#best table tbody").html(html);
+      $("#best table tfoot .total").html(uu.toFixed(2));
+    }
+  })
+});
+//定义一个按照对象某个属性的排序函数
+function compare(property){
+  return function(a,b){
+    var value1=a[property];
+    var value2=b[property];
+    return value1-value2;
+  }
+}
+//设置加减号汇总单击事件
+$("#result").on("click","span",function(e){
+  var target=e.target;
+  var keys=$(target).attr('id');
+  var result=$(target).parent().next().next().next();
+  var p=$(result).prev().html();
+  if(keys=="add"){
+    $(result).next().html(((parseFloat($(target).prev().html())+1)*p).toFixed(2));
+  }else if(keys=="dele"){
+    $(result).next().html(((parseFloat($(target).next().html()-1))*p).toFixed(2));
+  }
+  var tbody=$(target).parent().parent().parent();
+  var td=$(tbody).children().children(".sum");
+  for(var i=0,add=0;i<td.length;i++){
+    add+=parseFloat(td[i].innerHTML);
+  }
+  // console.log(add);
+  //将累加的结果添加到总计
+  $(".total").html(add.toFixed(2));
+});
+//设置提交订单的单击事件
+$("#subOrders").click(function(e){
+  e.preventDefault();
+  var users=sessionStorage.getItem("userName");
+  if(users){
+    window.location.href="userCenter.html";
+  }else{
+    alert("请先登录后再提交！");
+  }
+});

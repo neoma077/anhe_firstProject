@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>用户登录</title>
+  <style>
+   #logBox{
+     text-align: center;
+     box-sizing: border-box;
+     padding:50px;
+     width: 50%;
+     margin: 100px auto;
+     border:1px solid black;
+   }
+    #logBox label{
+      display: inline-block;
+      width:20%;
+      margin-top: 20px;
+      text-align: right;
+    }
+    #logBox #logIn{
+      display: inline-block;
+      text-decoration: none;
+      color:#fff;
+      width:30%;
+      line-height: 30px;
+      font-size: 18px;
+      margin-top: 20px;
+      border-radius:5px;
+      background: deepskyblue;
+    }
+  </style>
+</head>
+<body>
+<div id="logBox">
+  <h1>用户登录</h1>
+  <form action="userLogin.php">
+    <div>
+      <label for="userName">姓名：</label><input type="text" name="userName" id="userName">
+    </div>
+    <div>
+      <label for="userPwd">密码：</label><input type="password" name="userPwd" id="userPwd">
+    </div>
+    <a href="#" id="logIn">登录</a>
+  </form>
+  <script src="js/jquery-3.1.1.js"></script>
+  <script>
+    $("#logIn").click(function () {
+      var uname=$("#logBox #userName").val();
+      var upwd=$("#logBox #userPwd").val();
+      $.ajax({
+        type:'POST',
+        url:'userLogin.php',
+        data:{uname:uname,upwd:upwd},
+        success:function(txt,msg,xhr) {
+            //console.log(arguments);
+          if(txt=="pass"){
+            console.log("用户登录成功！");
+            setTimeout(function(){
+              window.open("1.html");
+            },3000);
+          }else{
+            console.log("用户登录失败！请从新登录！！！");
+          }
+        }
+      });
+      //设置本地存储
+      localStorage.setItem("userName",uname);
+      localStorage.setItem("userPwd",upwd);
+    });
+  </script>
+</div>
+</body>
+</html>

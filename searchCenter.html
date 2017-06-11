@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    #footer{
+      margin-top:200px;
+    }
+  </style>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
+</head>
+<body>
+<header id="header"></header>
+<div class="container">
+  <h2 class="text-center">检索结果</h2>
+  <table class="table table-hover table-striped">
+    <thead>
+    <tr>
+      <th>类别</th>
+      <th>名称</th>
+      <th>价格</th>
+      <th>超市名称</th>
+      <th>添加到购物车</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><a href="#" class="btn btn-block btn-primary" id="selfS">确定</a></td>
+      <td></td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
+<footer id="footer"></footer>
+<script src="js/jquery-3.1.1.js"></script>
+<script>
+  //异步请求index.html的头部信息
+  $("#header").load("data/header.php");
+  $("#footer").load("data/footer.php");
+  //获取本地存储的检索数据结果
+  var infomation=localStorage.getItem("searchResult");
+  //将JSON字符串转换为数组对象
+  information=JSON.parse(infomation);
+//  console.log(information);
+  //将服务器返回的数据显示在检索结果页面
+  var html="";
+  for(var i=0;i<information.length;i++){
+    html+=`<tr>
+      <td>${information[i].kinds}</td>
+      <td>${information[i].pname}</td>
+      <td>${information[i].price}</td>
+      <td>${information[i].supermarket}</td>
+      <td><a href="#" class="btn btn-info addP">添加到购物车</a></td>
+    </tr>`;
+  }
+  //将检索到的数据插入到tbody下
+  $("tbody").html(html);
+  //为添加购物车按钮添加单击事件
+  var productDetail=[];
+  $(".addP").click(function(e){
+    e.preventDefault();
+    var names=$(this).parent().prev().prev().prev().html();
+    var price=$(this).parent().prev().prev().html();
+    //将用户选取的数据转换为JSON字符串
+    productDetail.push({pname:names,price:price});
+    //console.log(productDetail);
+  });
+
+  $("#selfS").click(function(e){
+    e.preventDefault();
+    //判断用户是否已经登录
+    var uname=sessionStorage.getItem("userName");
+    if(uname){
+      location.href="userCenter.html";
+      //将用户所选择的产品存储在客户端本地
+      productDetail=JSON.stringify(productDetail);
+      sessionStorage.setItem("productDetail",productDetail);
+    }else{
+      alert("请先登录后再提交！");
+    }
+  })
+</script>
+</body>
+</html>

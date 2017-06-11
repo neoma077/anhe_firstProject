@@ -1,0 +1,91 @@
+/*footer样式*/
+.container .row .col-sm-12 ul{
+  text-align: center;
+}
+.container .row .col-sm-12 ul>li{
+  border-right:1px solid #aaa;
+}
+.container img{
+  width:100%;
+}
+.container .row .col-sm-12 ul>li>a{
+  color:#666;
+}
+/*设置手风琴添加按钮样式*/
+#main #accordion span{
+  cursor:pointer;
+}
+#dropdown{
+  z-index: 1000;
+  width:200px;
+  position:absolute;
+  left: 489px;
+  top: 158px;
+}
+/*设置产品详情中的样式*/
+#accordion .collapse ul>li{
+  width:50%;
+  border: 1px solid #777;
+}
+#accordion .collapse ul>li>a{
+  display:inline-block ;
+  width:65%;
+  color:#333;
+  text-decoration: none;
+}
+#accordion .collapse ul>li>span{
+  display: inline-block;
+  width:30%;
+  font-size: 18px;
+  padding-right:10%;
+  text-align: right;
+}
+
+/*#footer{*/
+  /*/!*position: absolute;*!/*/
+  /*left:20%;*/
+  /*bottom:5%;*/
+/*}*/
+/*用户中心的样式*/
+/*#leftSide #userInfo{*/
+  /*width:100px;*/
+  /*margin-bottom:20px;*/
+/*}*/
+/*#leftSide #userInfo>img{*/
+  /*width:50%;*/
+/*}*/
+/*#footer{*/
+  /*padding-top:30px;*/
+  /*text-align: center;*/
+  /*margin-top:200px;*/
+/*}*/
+/*#main #leftSide{*/
+  /*width:20%;*/
+  /*float:left;*/
+  /*margin-left:10%;*/
+/*}*/
+/*#main #rightSide{*/
+  /*width:60%;*/
+  /*float:right;*/
+  /*margin-right:10%;*/
+  /*text-align: center;*/
+/*}*/
+/*#rightSide h3{*/
+  /*padding-bottom:20px;*/
+/*}*/
+/*#rightSide label{*/
+  /*line-height:34px;*/
+/*}*/
+/*#rightSide #psearch{*/
+  /*display:none;*/
+/*}*/
+/*#rightSide #pk{*/
+  /*height:34px;*/
+  /*width: 207px;*/
+  /*padding-left:50px;*/
+/*}*/
+#user-login{
+  position:absolute;
+  left:10%;
+  top:30%;
+}

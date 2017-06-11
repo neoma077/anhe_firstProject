@@ -1,0 +1,15 @@
+<?php
+    header("Content-type:text/plain;charset='utf8");
+    $link=mysql_connect("127.0.0.1",'root','root','shoppingCenter');
+    mysqli_set_charset($link,'utf8');
+    $uname=$_REQUEST['uname'];
+    $upwd=$_REQUEST['upwd'];
+    $uemail=$_REQUEST['uemail'];
+    $ubirthday=$_REQUEST['ubirthday'];
+    $sql="insert userInfo(uname,upwd,uemail,ubirthday) values('$uname','$upwd','$uemail','$ubirthday')";
+    $result=mysqli_query($link,$sql);
+    if(var_dump($result)){
+               echo "succ";
+           }else{
+               echo "error";
+           }
